@@ -1,0 +1,1 @@
+pub mod metabridge_token;
