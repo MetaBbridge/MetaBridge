@@ -75,7 +75,7 @@ pub mod MetabridgeContract {
         ) -> Entrepreneur {
             let caller_entity = get_caller_address();
             // the check user role is the function showing missing function
-            let role_status = check_user_role();
+            let role_status = self.check_user_role();
 
             assert(role_status == 1, 'Only an ENtrepreneur Can Register Here');
 
