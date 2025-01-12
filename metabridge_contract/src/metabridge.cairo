@@ -80,7 +80,7 @@ pub mod MetabridgeContract {
             
             let role_status = self.check_user_role();
 
-            assert(role_status == 1, 'Entrepreneur Can Register Here');
+            assert(role_status == 1, 'Only Entrepreneur Can Register');
 
             let new_entrepreneur = Entrepreneur {
                 full_name,
