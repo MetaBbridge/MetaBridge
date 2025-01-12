@@ -39,6 +39,50 @@ pub struct Role {
     pub user_address: ContractAddress
 }
 
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct Project {
+    pub project_name: felt252,
+    pub project_logo: felt252,
+    pub preject_description: felt252,
+    pub project_story: felt252,
+    pub project_usecase: felt252,
+    pub problem_statement: felt252
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct Links{
+    pub website: felt252,
+    pub github: felt252,
+    pub linkedin: felt252,
+    pub twitter: felt252,
+    pub telegram: felt252
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct Milestone {
+    pub timeline: felt252,
+    pub kpi: felt252,
+    pub roi: felt252
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct Document {
+    pub roadmap: felt252,
+    pub pitch_deck: felt252
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct Order {
+    pub project: Project,
+    pub links: Links,
+    pub milestones: Milestone,
+    pub team_details: felt252,
+    pub document_upload: Document,
+    pub tokenized_equity_offer: felt252,
+    pub role_in_project: felt252,
+    pub funding_amount_requested: felt252
+}
+
 
 #[starknet::interface]
 pub trait IMetabridge<TContractState> {
@@ -76,6 +120,17 @@ pub trait IMetabridge<TContractState> {
         linkedin_link: felt252
     ) -> Investor;
 
+    fn create_order(
+        ref self: TContractState,
+        project: Project,
+        links: Links,
+        milestones: Milestone,
+        team_details: felt252,
+        document_upload: Document,
+        tokenized_equity_offer: felt252,
+        role_in_project: felt252
+    ) -> felt252;
+
    
     // Getter functions
 
@@ -86,5 +141,11 @@ pub trait IMetabridge<TContractState> {
     fn check_user_role(
         self: @TContractState
     ) -> felt252;
+
+    fn list_order(
+        ref self: TContractState,
+        order_id: felt252,
+        funding_amount_requested: felt252
+    ) -> Order;
 
 }

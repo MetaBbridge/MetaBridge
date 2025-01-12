@@ -7,7 +7,7 @@ pub mod MetabridgeContract {
     use starknet::{
         get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info
     };
-    use crate::interface::metabridge::{IMetabridge, Entrepreneur, Role, Investor};
+    use crate::interface::metabridge::{IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, };
     use core::poseidon::PoseidonTrait;
     use core::hash::{HashStateTrait, HashStateExTrait};
 
@@ -22,7 +22,10 @@ pub mod MetabridgeContract {
         user_roles: Map::<ContractAddress, felt252>,
         investors: Map::<u256, Investor>,
         investors_count: u256,
-        investors_id: Map::<ContractAddress, u256>
+        investors_id: Map::<ContractAddress, u256>,
+
+        orders: Map::<ContractAddress, Map<u256, Order>>,
+        orders_count: u256
     }
 
     #[abi(embed_v0)]
@@ -106,6 +109,51 @@ pub mod MetabridgeContract {
 
         }
 
+        fn create_order(
+            ref self: ContractState,
+            project: Project,
+            links: Links,
+            milestones: Milestone,
+            team_details: felt252,
+            document_upload: Document,
+            tokenized_equity_offer: felt252,
+            role_in_project: felt252
+        ) -> felt252 {
+            let caller_entity = get_caller_address();
+
+            let role_status = self.check_user_role();
+
+            assert(role_status == 1, 'Only Entrepreneur Can Create Order');
+            self.orders_count.write(self.orders_count.read() + 1);
+
+            let order_id = self.orders_count.read();
+
+            let new_order = Order {
+                project,
+                links,
+                milestones,
+                team_details,
+                document_upload,
+                tokenized_equity_offer,
+                role_in_project,
+                funding_amount_requested: 0.into()
+            };
+
+            self.orders.entry(caller_entity).write(order_id, new_order);
+            
+
+            order_id
+
+        }
+
+        fn list_order(
+            ref self: ContractState,
+            order_id: felt252,
+            funding_amount_requested: felt252
+        ) -> Order {
+
+        }
+
         fn register_investor(
             ref self: ContractState,
             full_name: felt252,
@@ -135,10 +183,18 @@ pub mod MetabridgeContract {
             };
 
             self.investors_count.write(self.investors_count.read() + 1);
-            self.investors.entry(self.investors_count.read()).write(inv);
-            self.investors_id.entry(user_addr).write(self.investors_count.read());
+            let entrepreneur_id = self.investors_count.read();
+            self.investors.entry(entrepreneur_id).write(inv);
+            self.investors_id.entry(user_addr).write(entrepreneur_id);
 
             return inv;
         }
+
+    //    fn add_project_overview()
+
+        // fn create_order(
+        //     ref self: ContractState,
+
+        // )
     }
 }
