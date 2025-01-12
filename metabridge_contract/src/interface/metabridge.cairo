@@ -3,15 +3,6 @@ use starknet::ContractAddress;
 // Data structure layout for metabridge system
 
 #[derive(Drop, Copy, Serde, starknet::Store)]
-pub struct Investor {
-    pub firstName: felt252,
-    pub lastName: felt252,
-    pub country: felt252,
-    pub state: felt252,
-    
-}
-
-#[derive(Drop, Copy, Serde, starknet::Store)]
 pub struct Entrepreneur {
     pub full_name: felt252,
     pub email: felt252,
@@ -39,7 +30,7 @@ pub struct Investor {
     pub region: felt252,
     pub city: felt252,
     pub home_address: felt252,
-    pub linkedIn_link: felt252
+    pub linkedin_link: felt252
 }
 
 #[derive(Drop, Copy, Serde, starknet::Store)]
@@ -81,12 +72,11 @@ pub trait IMetabridge<TContractState> {
         country_of_origin: felt252,
         region: felt252,
         city: felt252,
-        home_address:
+        home_address: felt252,
         linkedin_link: felt252
-    )
+    ) -> Investor;
 
    
-
     // Getter functions
 
     fn user_has_role(
