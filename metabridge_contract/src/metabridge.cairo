@@ -26,8 +26,11 @@ pub mod MetabridgeContract {
 
         orders: Map::<u256, Order>,
         orders_count: u256,
-        orders_id_created: Map::<ContractAddress, u256>
-        
+        orders_id_created: Map::<ContractAddress, u256>,
+        listed_order_count: u256,
+        listed_order_id: Map::<ContractAddress, u256>,
+        listed_orders: Map::<u256, u256> 
+        order_to
     }
 
     #[abi(embed_v0)]
@@ -144,7 +147,6 @@ pub mod MetabridgeContract {
             self.orders.entry(order_id).write(new_order);
             self.orders_id_created.entry(caller_entity).write(order_id);
             
-
             order_id
 
         }
@@ -164,6 +166,13 @@ pub mod MetabridgeContract {
             let mut orrder = self.orders.entry(order_id).read();
             orrder.funding_amount_requested = funding_amount;
             self.orders.entry(order_id).write(orrder);
+
+            self.listed_order_count.write(self.listed_order_count.read() + 1);
+            let listed_orrder_id = self.listed_order_count.read();
+
+            self.listed_order_id.entry(caller_entity).write(listed_orrder_id);
+
+            self.listed_orders.entry(order_id).write(listed_orrder_id);
 
             return orrder;
 
