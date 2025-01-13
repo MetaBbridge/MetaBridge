@@ -129,8 +129,7 @@ pub trait IMetabridge<TContractState> {
         document_upload: Document,
         tokenized_equity_offer: felt252,
         role_in_project: felt252
-    ) -> felt252;
-
+    ) -> u256;
    
     // Getter functions
 
@@ -144,8 +143,8 @@ pub trait IMetabridge<TContractState> {
 
     fn list_order(
         ref self: TContractState,
-        order_id: felt252,
-        funding_amount_requested: felt252
+        order_id: u256,
+        funding_amount: felt252
     ) -> Order;
 
 }

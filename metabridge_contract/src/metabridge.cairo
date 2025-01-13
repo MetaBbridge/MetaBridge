@@ -24,8 +24,10 @@ pub mod MetabridgeContract {
         investors_count: u256,
         investors_id: Map::<ContractAddress, u256>,
 
-        orders: Map::<ContractAddress, Map<u256, Order>>,
-        orders_count: u256
+        orders: Map::<u256, Order>,
+        orders_count: u256,
+        orders_id_created: Map::<ContractAddress, u256>
+        
     }
 
     #[abi(embed_v0)]
@@ -118,12 +120,12 @@ pub mod MetabridgeContract {
             document_upload: Document,
             tokenized_equity_offer: felt252,
             role_in_project: felt252
-        ) -> felt252 {
+        ) -> u256 {
             let caller_entity = get_caller_address();
 
             let role_status = self.check_user_role();
 
-            assert(role_status == 1, 'Only Entrepreneur Can Create Order');
+            assert(role_status == 1, 'Only Entrepreneur Can Create');
             self.orders_count.write(self.orders_count.read() + 1);
 
             let order_id = self.orders_count.read();
@@ -139,7 +141,8 @@ pub mod MetabridgeContract {
                 funding_amount_requested: 0.into()
             };
 
-            self.orders.entry(caller_entity).write(order_id, new_order);
+            self.orders.entry(order_id).write(new_order);
+            self.orders_id_created.entry(caller_entity).write(order_id);
             
 
             order_id
@@ -148,9 +151,21 @@ pub mod MetabridgeContract {
 
         fn list_order(
             ref self: ContractState,
-            order_id: felt252,
-            funding_amount_requested: felt252
+            order_id: u256,
+            funding_amount: felt252
         ) -> Order {
+            let caller_entity = get_caller_address();
+            let role_status = self.check_user_role();
+            assert(role_status == 1, 'Only Entrepreneur Allowed');
+
+            let user_order_id = self.orders_id_created.entry(caller_entity).read();
+            assert(user_order_id == order_id, 'User ID does not exist');
+
+            let mut orrder = self.orders.entry(order_id).read();
+            orrder.funding_amount_requested = funding_amount;
+            self.orders.entry(order_id).write(orrder);
+
+            return orrder;
 
         }
 
@@ -190,11 +205,5 @@ pub mod MetabridgeContract {
             return inv;
         }
 
-    //    fn add_project_overview()
-
-        // fn create_order(
-        //     ref self: ContractState,
-
-        // )
     }
 }
