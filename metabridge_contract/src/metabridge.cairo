@@ -8,7 +8,7 @@ pub mod MetabridgeContract {
         get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info,
     };
     use crate::interface::metabridge::{
-        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, Team, Equity
+        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, Team, Equity, EquityDistribution, EquityAllocation
     };
     use core::poseidon::PoseidonTrait;
     use core::hash::{HashStateTrait, HashStateExTrait};
@@ -160,9 +160,7 @@ pub mod MetabridgeContract {
         
             let mut order = self.orders.entry(order_id).read();
         
-            
             order.milestones = milestone;
-        
             self.orders.entry(order_id).write(order);
         }
         
