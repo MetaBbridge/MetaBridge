@@ -153,7 +153,7 @@ pub mod MetabridgeContract {
             order_id: u256,
             milestone: Milestone,
         ) {
-            let caller_entity = get_caller_address();
+            // let caller_entity = get_caller_address();
             let role_status = self.check_user_role();
         
             assert(role_status == 1, 'Only Entrepreneur Can Add');
