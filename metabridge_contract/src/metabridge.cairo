@@ -8,7 +8,7 @@ pub mod MetabridgeContract {
         get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info,
     };
     use crate::interface::metabridge::{
-        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document,
+        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, Team, Equity
     };
     use core::poseidon::PoseidonTrait;
     use core::hash::{HashStateTrait, HashStateExTrait};
@@ -40,7 +40,7 @@ pub mod MetabridgeContract {
             let user_address = get_caller_address();
             let status = self.user_roles.entry(user_address).read();
 
-            if (status != 0) {  ``
+            if (status != 0) {
                 return true;
             } else {
                 return false;
@@ -113,9 +113,9 @@ pub mod MetabridgeContract {
             location_addr: felt252,
             links: Links,
             milestones: Milestone,
-            team_details: felt252,
+            team_details: Team,
             document_upload: Document,
-            tokenized_equity_offer: felt252,
+            tokenized_equity_offer: Equity,
             role_in_project: felt252,
         ) -> u256 {
             let caller_entity = get_caller_address();

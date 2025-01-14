@@ -100,6 +100,26 @@ pub struct Team {
 }
 
 #[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct Equity {
+    pub token_equity_distribution: EquityDistribution,
+    pub equity_allocation: EquityAllocation
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct EquityDistribution {
+    pub totalEquity: u256,
+    pub distributed_equity: u256,
+    pub equity_share_offer: u256
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
+pub struct EquityAllocation {
+    pub equity_allocation: u256,
+    pub total_equity_allocated: u256,
+    pub percentage_allocation: u256
+}
+
+#[derive(Drop, Copy, Serde, starknet::Store)]
 pub struct Order {
     pub project: Project,
     pub email: felt252,
@@ -160,9 +180,8 @@ pub trait IMetabridge<TContractState> {
         milestones: Milestone,
         team_details: Team,
         document_upload: Document,
-        tokenized_equity_offer: felt252,
-        role_in_project: felt252,
-        
+        tokenized_equity_offer: Equity,
+        role_in_project: felt252
     ) -> u256;
 
     fn list_order(
