@@ -132,7 +132,8 @@ pub struct Order {
     pub tokenized_equity_offer: felt252,
     pub role_in_project: felt252,
     pub funding_amount_requested: felt252,
-    pub verified_by_admin: bool
+    pub verified_by_admin: bool,
+    pub waiting_pool: Map::<ContractAddress, u256>,
 }
 
 #[starknet::interface]
