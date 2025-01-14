@@ -5,9 +5,11 @@ pub mod MetabridgeContract {
     use starknet::storage::{Map, StorageMapWriteAccess, StorageMapReadAccess, StoragePathEntry};
     use core::array::ArrayTrait;
     use starknet::{
-        get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info
+        get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info,
     };
-    use crate::interface::metabridge::{IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, };
+    use crate::interface::metabridge::{
+        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document,
+    };
     use core::poseidon::PoseidonTrait;
     use core::hash::{HashStateTrait, HashStateExTrait};
 
@@ -23,47 +25,37 @@ pub mod MetabridgeContract {
         investors: Map::<u256, Investor>,
         investors_count: u256,
         investors_id: Map::<ContractAddress, u256>,
-
         orders: Map::<u256, Order>,
         orders_count: u256,
         orders_id_created: Map::<ContractAddress, u256>,
         listed_order_count: u256,
         listed_order_id: Map::<ContractAddress, u256>,
         listed_orders: Map::<u256, u256>,
-        listed_order_to_order: Map::<u256, Order>
+        listed_order_to_order: Map::<u256, Order>,
     }
 
     #[abi(embed_v0)]
     impl Metabridge of IMetabridge<ContractState> {
-        fn user_has_role(
-            self: @ContractState
-        ) -> bool {
+        fn user_has_role(self: @ContractState) -> bool {
             let user_address = get_caller_address();
             let status = self.user_roles.entry(user_address).read();
-            
-            if(status != 0) {
+
+            if (status != 0) {  ``
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
 
-        fn select_role(
-            ref self: ContractState,
-            roleTitle: felt252
-        ) {
+        fn select_role(ref self: ContractState, roleTitle: felt252) {
             let caller_addr = get_caller_address();
 
-            let role = roleTitle; 
-            self.user_roles.entry(caller_addr).write( role);
-
-           // role
+            let role = roleTitle;
+            self.user_roles.entry(caller_addr).write(role);
+            // role
         }
 
-        fn check_user_role(
-            self: @ContractState
-        ) -> felt252 {
+        fn check_user_role(self: @ContractState) -> felt252 {
             let user_addr = get_caller_address();
             let role_status = self.user_roles.entry(user_addr).read();
 
@@ -82,10 +74,10 @@ pub mod MetabridgeContract {
             home_address: felt252,
             business_name: felt252,
             business_reg_id: u256,
-            business_address: felt252
+            business_address: felt252,
         ) -> Entrepreneur {
             let caller_entity = get_caller_address();
-            
+
             let role_status = self.check_user_role();
 
             assert(role_status == 1, 'Only Entrepreneur Can Register');
@@ -101,7 +93,7 @@ pub mod MetabridgeContract {
                 business_name,
                 business_reg_id,
                 business_address,
-                hasRegistered: true
+                hasRegistered: true,
             };
 
             self.entrepreneur_count.write(self.entrepreneur_count.read() + 1);
@@ -111,18 +103,20 @@ pub mod MetabridgeContract {
             self.entrepreneurs_id.entry(caller_entity).write(self.entrepreneur_count.read());
 
             return new_entrepreneur;
-
         }
 
         fn create_order(
             ref self: ContractState,
             project: Project,
+            email: felt252,
+            phone_no: felt252,
+            location_addr: felt252,
             links: Links,
             milestones: Milestone,
             team_details: felt252,
             document_upload: Document,
             tokenized_equity_offer: felt252,
-            role_in_project: felt252
+            role_in_project: felt252,
         ) -> u256 {
             let caller_entity = get_caller_address();
 
@@ -135,27 +129,45 @@ pub mod MetabridgeContract {
 
             let new_order = Order {
                 project,
+                email,
+                phone_no,
+                location_addr,
                 links,
                 milestones,
                 team_details,
                 document_upload,
                 tokenized_equity_offer,
                 role_in_project,
-                funding_amount_requested: 0.into()
+                funding_amount_requested: 0.into(),
+                verified_by_admin: false
             };
 
             self.orders.entry(order_id).write(new_order);
             self.orders_id_created.entry(caller_entity).write(order_id);
-            
-            order_id
 
+            order_id
         }
 
-        fn list_order(
+        fn add_milestone(
             ref self: ContractState,
             order_id: u256,
-            funding_amount: felt252
-        ) -> Order {
+            milestone: Milestone,
+        ) {
+            let caller_entity = get_caller_address();
+            let role_status = self.check_user_role();
+        
+            assert(role_status == 1, 'Only Entrepreneur Can Add');
+        
+            let mut order = self.orders.entry(order_id).read();
+        
+            
+            order.milestones = milestone;
+        
+            self.orders.entry(order_id).write(order);
+        }
+        
+
+        fn list_order(ref self: ContractState, order_id: u256, funding_amount: felt252) -> Order {
             let caller_entity = get_caller_address();
             let role_status = self.check_user_role();
             assert(role_status == 1, 'Only Entrepreneur Allowed');
@@ -180,7 +192,6 @@ pub mod MetabridgeContract {
             self.listed_order_to_order.entry(listed_orrder_id).write(orrder);
 
             return orrder;
-
         }
 
         fn register_investor(
@@ -192,7 +203,7 @@ pub mod MetabridgeContract {
             region: felt252,
             city: felt252,
             home_address: felt252,
-            linkedin_link: felt252
+            linkedin_link: felt252,
         ) -> Investor {
             let user_addr = get_caller_address();
 
@@ -208,7 +219,7 @@ pub mod MetabridgeContract {
                 region,
                 city,
                 home_address,
-                linkedin_link
+                linkedin_link,
             };
 
             self.investors_count.write(self.investors_count.read() + 1);
@@ -219,5 +230,12 @@ pub mod MetabridgeContract {
             return inv;
         }
 
+        fn view_order(self: @ContractState, listed_order: u256) -> Order {
+            let listed_order_id = self.listed_orders.entry(listed_order).read();
+            assert(listed_order_id != 0, 'Order is not listed');
+
+            let order_details = self.listed_order_to_order.entry(listed_order_id).read();
+            return order_details;
+        }
     }
 }
