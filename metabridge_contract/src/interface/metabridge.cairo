@@ -1,4 +1,5 @@
 use starknet::ContractAddress;
+use starknet::storage::{Map, StorageMapWriteAccess, StorageMapReadAccess};
 
 // Data structure layout for metabridge system
 
@@ -127,13 +128,12 @@ pub struct Order {
     pub location_addr: felt252,
     pub links: Links,
     pub milestones: Milestone,
-    pub team_details: felt252,
+    pub team_details: Team,
     pub document_upload: Document,
-    pub tokenized_equity_offer: felt252,
+    pub tokenized_equity_offer: Equity,
     pub role_in_project: felt252,
     pub funding_amount_requested: felt252,
-    pub verified_by_admin: bool,
-    pub waiting_pool: Map::<ContractAddress, u256>,
+    pub verified_by_admin: bool
 }
 
 #[starknet::interface]
@@ -196,6 +196,13 @@ pub trait IMetabridge<TContractState> {
         order_id: u256,
         milestone: Milestone
     );
+
+    fn invest(
+        ref self: TContractState,
+        order_id: u256,
+        investment_amount: felt252
+    ) -> bool;
+
     // Getter functions
     fn user_has_role(
         self: @TContractState,

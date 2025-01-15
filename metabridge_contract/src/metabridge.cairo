@@ -8,7 +8,8 @@ pub mod MetabridgeContract {
         get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info,
     };
     use crate::interface::metabridge::{
-        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, Team, Equity, EquityDistribution, EquityAllocation
+        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, Team,
+        Equity, EquityDistribution, EquityAllocation,
     };
     use core::poseidon::PoseidonTrait;
     use core::hash::{HashStateTrait, HashStateExTrait};
@@ -32,6 +33,7 @@ pub mod MetabridgeContract {
         listed_order_id: Map::<ContractAddress, u256>,
         listed_orders: Map::<u256, u256>,
         listed_order_to_order: Map::<u256, Order>,
+        waiting_pool: Map::<ContractAddress, u256>
     }
 
     #[abi(embed_v0)]
@@ -126,7 +128,7 @@ pub mod MetabridgeContract {
             self.orders_count.write(self.orders_count.read() + 1);
 
             let order_id = self.orders_count.read();
-
+            
             let new_order = Order {
                 project,
                 email,
@@ -139,7 +141,7 @@ pub mod MetabridgeContract {
                 tokenized_equity_offer,
                 role_in_project,
                 funding_amount_requested: 0.into(),
-                verified_by_admin: false
+                verified_by_admin: false,
             };
 
             self.orders.entry(order_id).write(new_order);
@@ -148,22 +150,18 @@ pub mod MetabridgeContract {
             order_id
         }
 
-        fn add_milestone(
-            ref self: ContractState,
-            order_id: u256,
-            milestone: Milestone,
-        ) {
+        fn add_milestone(ref self: ContractState, order_id: u256, milestone: Milestone) {
             // let caller_entity = get_caller_address();
             let role_status = self.check_user_role();
-        
+
             assert(role_status == 1, 'Only Entrepreneur Can Add');
-        
+
             let mut order = self.orders.entry(order_id).read();
-        
+
             order.milestones = milestone;
             self.orders.entry(order_id).write(order);
         }
-        
+
 
         fn list_order(ref self: ContractState, order_id: u256, funding_amount: felt252) -> Order {
             let caller_entity = get_caller_address();
@@ -234,6 +232,34 @@ pub mod MetabridgeContract {
 
             let order_details = self.listed_order_to_order.entry(listed_order_id).read();
             return order_details;
+        }
+
+        fn invest(
+            ref self: ContractState,
+            order_id: u256,
+            investment_amount: felt252
+        ) -> bool {
+            let caller_addr = get_caller_address();
+            let role_status = self.check_user_role();
+
+            assert(role_status == 2, 'Only Investor Allowed');
+
+            let orderr = self.orders.entry(order_id).read();
+            let order_status = orderr.verified_by_admin;
+
+            assert(order_status == true, 'Order hasnt been listed');
+
+            self.waiting_pool.entry(caller_addr).
+
+            let mut order = self.orders.entry(order_id).read();
+            let current_amount = order.waiting_pool.entry(caller_address).read();
+            order.waiting_pool.entry(caller_address).write(current_amount + amount);
+
+            self.orders.entry(order_id).write(order);
+            true
+
+
+
         }
     }
 }
