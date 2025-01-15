@@ -33,7 +33,11 @@ pub mod MetabridgeContract {
         listed_order_id: Map::<ContractAddress, u256>,
         listed_orders: Map::<u256, u256>,
         listed_order_to_order: Map::<u256, Order>,
-        waiting_pool: Map::<ContractAddress, u256>
+        waiting_pool: Map::<ContractAddress, u256>, //address to amount
+        waiting_pool_list: Map::<ContractAddress, u256>, //address to order_id
+        investor_count_for_pool_opened: Map::<ContractAddress, u256>, //address to no of pool opened
+        waiting_pool_id: u256,
+        waiting_pool_by_user_to_id: Map::<ContractAddress, u256>
     }
 
     #[abi(embed_v0)]
@@ -237,8 +241,8 @@ pub mod MetabridgeContract {
         fn invest(
             ref self: ContractState,
             order_id: u256,
-            investment_amount: felt252
-        ) -> bool {
+            investment_amount: u256
+        ) -> u256 {
             let caller_addr = get_caller_address();
             let role_status = self.check_user_role();
 
@@ -249,16 +253,20 @@ pub mod MetabridgeContract {
 
             assert(order_status == true, 'Order hasnt been listed');
 
-            self.waiting_pool.entry(caller_addr).
+            assert(investment_amount > 0, 'Amount Not Allowed');
 
-            let mut order = self.orders.entry(order_id).read();
-            let current_amount = order.waiting_pool.entry(caller_address).read();
-            order.waiting_pool.entry(caller_address).write(current_amount + amount);
+            self.waiting_pool.entry(caller_addr).write(investment_amount);
+            self.waiting_pool_list.entry(caller_addr).write(order_id);
+            self.investor_count_for_pool_opened.entry(caller_addr).write(
+                self.investor_count_for_pool_opened.entry(caller_addr).read() + 1
+            );
 
-            self.orders.entry(order_id).write(order);
-            true
+            self.waiting_pool_id.write(self.waiting_pool_id.read() + 1);
+            let pool_id = self.waiting_pool_id.read();
 
+            self.waiting_pool_by_user_to_id.entry(caller_addr).write(pool_id);
 
+            pool_id
 
         }
     }

@@ -200,8 +200,8 @@ pub trait IMetabridge<TContractState> {
     fn invest(
         ref self: TContractState,
         order_id: u256,
-        investment_amount: felt252
-    ) -> bool;
+        investment_amount: u256
+    ) -> u256;
 
     // Getter functions
     fn user_has_role(
