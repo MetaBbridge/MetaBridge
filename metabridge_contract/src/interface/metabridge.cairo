@@ -202,12 +202,13 @@ pub trait IMetabridge<TContractState> {
         investment_amount: u256
     ) -> u256;
 
-    // fn commit_funds(
-    //     ref self: TContractState,
-    //     order_id: u256,
-    //     waiting_pool_id: u256,
-    //     amount_to_invest: u256
-    // ) -> bool;
+    fn commit_funds(
+        ref self: TContractState,
+        order_id: u256,
+        listed_order_id: u256,
+        waiting_pool_id: u256,
+        commit_amount: u256
+    ) -> bool;
 
     // Getter functions
     fn user_has_role(

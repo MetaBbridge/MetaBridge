@@ -8,11 +8,11 @@ pub mod MetabridgeContract {
         get_caller_address, get_contract_address, get_block_timestamp, ContractAddress, get_tx_info,
     };
     use crate::interface::metabridge::{
-        IMetabridge, Entrepreneur, Role, Investor, Order, Project, Links, Milestone, Document, Team,
-        Equity, EquityDistribution, EquityAllocation,
+        IMetabridge, Entrepreneur, Investor, Order, Project, Links, Milestone, Document, Team,
+        Equity
     };
-    use core::poseidon::PoseidonTrait;
-    use core::hash::{HashStateTrait, HashStateExTrait};
+    // use core::poseidon::PoseidonTrait;
+    // use core::hash::{HashStateTrait, HashStateExTrait};
 
 
     #[storage]
@@ -267,7 +267,37 @@ pub mod MetabridgeContract {
             self.waiting_pool_by_user_to_id.entry(caller_addr).write(pool_id);
 
             pool_id
-
         }
+
+        fn commit_funds(
+            ref self: ContractState,
+            order_id: u256,
+            listed_order_id: u256,
+            waiting_pool_id: u256,
+            commit_amount: u256
+        ) -> bool{
+            let caller_addr = get_caller_address();
+            let role_status = self.check_user_role();
+
+            assert(order_id != 0, 'Invalid Order');
+            assert(listed_order_id != 0, 'Invalid Listing Order');
+            assert(waiting_pool_id != 0, 'Invalid Pool Id');
+
+            assert(role_status == 2, 'Only Investor Allowed');
+            assert(commit_amount > 1, 'Invalid Commit Amount');
+
+            let listed_orrder_id = self.listed_orders.entry(order_id).read();
+
+            assert(listed_orrder_id == listed_order_id, 'Order Not Listed');
+            
+            let orrder = self.listed_order_to_order.entry(listed_order_id).read();
+            let is_order_verified = orrder.verified_by_admin;
+
+            assert(is_order_verified == true, 'Order is not verified');
+
+            true
+        }
+
+        
     }
 }
