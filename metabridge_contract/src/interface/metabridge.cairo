@@ -210,6 +210,10 @@ pub trait IMetabridge<TContractState> {
         commit_amount: u256
     ) -> bool;
 
+    fn verify_order(){
+        
+    }
+
     // Getter functions
     fn user_has_role(
         self: @TContractState,
