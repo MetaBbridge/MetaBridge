@@ -91,7 +91,7 @@ pub mod MetabridgeContract {
                 country_of_origin,
                 state,
                 home_address,
-                hasRegistered: true,
+                has_registered: true,
                 milestone_count: 0
             };
 
@@ -247,7 +247,10 @@ pub mod MetabridgeContract {
             return inv;
         }
 
-        fn view_order(self: @ContractState, listed_order: u256) -> Order {
+        fn view_order(
+            self: @ContractState, 
+            listed_order: u256
+        ) -> Order {
             let listed_order_id = self.listed_orders.entry(listed_order).read();
             assert(listed_order_id != 0, 'Order is not listed');
 
@@ -335,7 +338,7 @@ pub mod MetabridgeContract {
             true
         }
 
-        fn total_entrepreneurs(
+        fn get_total_entrepreneurs(
             self: @ContractState
         ) -> Array<Entrepreneur> {
             let mut entrepreneurs_array = ArrayTrait::new();
@@ -350,7 +353,31 @@ pub mod MetabridgeContract {
 
         }
 
-        fn view_order
+        fn view_orders(
+            self: @ContractState
+        ) -> Array<Order> {
+            let mut all_orders = ArrayTrait::new();
+            let orders_count = self.orders_count.read();
+
+            for count in 1..orders_count {
+                let orrd = self.orders.entry(count).read();
+                all_orders.append(orrd);
+            };
+
+            all_orders 
+
+        }
+
+        fn remove_entrepreneur(
+            ref self: ContractState,
+            entrepreneur_id: u256
+        ) -> Entrepreneur {
+            let mut entre = self.entrepreneurs.entry(entrepreneur_id).read();
+
+            entre.has_registered = false;
+
+            entre
+        }
 
     }
 }
