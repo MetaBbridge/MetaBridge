@@ -320,5 +320,22 @@ pub mod MetabridgeContract {
             true 
         }
 
+        fn total_entrepreneurs(
+            self: @ContractState
+        ) -> Array<Entrepreneur> {
+            let mut entrepreneurs_array = ArrayTrait::new();
+            let entrepreneur_total = self.entrepreneur_count.read();
+
+            for count in 1..entrepreneur_total {
+                let entrepreneur = self.entrepreneurs.entry(count).read();
+                entrepreneurs_array.append(entrepreneur);
+            };
+
+
+            entrepreneurs_array
+
+
+        }
+
     }
 }
