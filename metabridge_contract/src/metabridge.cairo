@@ -379,5 +379,21 @@ pub mod MetabridgeContract {
             entre
         }
 
+        fn get_total_no_of_entrepreneur(
+            self: @ContractState
+        ) -> u256 {
+            let no_of_entrepreneur = self.entrepreneur_count.read();
+
+            no_of_entrepreneur
+        }
+
+        fn get_total_no_of_orders(
+            self: @ContractState
+        ) -> u256 {
+            let no_of_orders = self.orders_count.read();
+
+            no_of_orders
+        }
+
     }
 }
