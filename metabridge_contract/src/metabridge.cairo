@@ -346,11 +346,11 @@ pub mod MetabridgeContract {
                 entrepreneurs_array.append(entrepreneur);
             };
 
-
             entrepreneurs_array
 
-
         }
+
+        fn view_order
 
     }
 }
