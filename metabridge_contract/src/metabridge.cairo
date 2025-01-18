@@ -60,7 +60,7 @@ pub mod MetabridgeContract {
             let caller_addr = get_caller_address();
 
             let role = roleTitle;
-            self.user_roles.entry(caller_addr).write(role);
+            self.user_roles.write(caller_addr, role);
         }
 
         fn check_user_role(self: @ContractState) -> felt252 {
@@ -69,7 +69,6 @@ pub mod MetabridgeContract {
 
             role_status
         }
-
 
         fn register_entrepreneur(
             ref self: ContractState,
