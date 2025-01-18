@@ -10,7 +10,8 @@ pub struct Entrepreneur {
     pub state: felt252,
     pub home_address: felt252,
     pub has_registered: bool,
-    pub milestone_count: u256
+    pub milestone_count: u256,
+    pub user_address: ContractAddress
     // pub teamCount: u8,
     // pub whoRegisterForCompany: felt252,
     // pub positionOfWhoRegister: felt252,
@@ -26,7 +27,8 @@ pub struct Investor {
     pub region: felt252,
     pub city: felt252,
     pub home_address: felt252,
-    pub linkedin_link: felt252
+    pub linkedin_link: felt252,
+    pub investor_address: ContractAddress
 }
 
 #[derive(Drop, Copy, Serde, starknet::Store)]
@@ -139,7 +141,7 @@ pub trait IMetabridge<TContractState> {
     fn select_role(
         ref self: TContractState,
         user_address: ContractAddress,
-        roleTitle: felt252
+        role_title: felt252
     );
 
     fn register_entrepreneur(
@@ -148,8 +150,9 @@ pub trait IMetabridge<TContractState> {
         email: felt252,
         country_of_origin: felt252,
         state: felt252,
-        home_address: felt252
-    ) -> Entrepreneur;
+        home_address: felt252,
+        user_address: ContractAddress
+    ) -> u256;
 
     fn register_investor(
         ref self: TContractState,
@@ -160,8 +163,9 @@ pub trait IMetabridge<TContractState> {
         region: felt252,
         city: felt252,
         home_address: felt252,
-        linkedin_link: felt252
-    ) -> Investor;
+        linkedin_link: felt252,
+        investor_address: ContractAddress
+    ) -> u256;
 
     fn create_order(
         ref self: TContractState,
@@ -174,24 +178,28 @@ pub trait IMetabridge<TContractState> {
         team_details: Team,
         document_upload: Document,
         tokenized_equity_offer: Equity,
-        role_in_project: felt252
+        role_in_project: felt252,
+        entrepreneur_id: u256
     ) -> u256;
 
     fn list_order(
         ref self: TContractState,
         order_id: u256,
+        entre_id: u256,
         funding_amount: u256
     ) -> Order;
    
     fn add_milestone(
         ref self: TContractState,
         order_id: u256,
+        entrepreneur_id: u256,
         milestone: Milestone
     ) -> u256;
 
     fn invest(
         ref self: TContractState,
         order_id: u256,
+        entre_id: u256,
         investment_amount: u256
     ) -> u256;
 
@@ -199,6 +207,7 @@ pub trait IMetabridge<TContractState> {
         ref self: TContractState,
         order_id: u256,
         listed_order_id: u256,
+        entre_id: u256,
         waiting_pool_id: u256,
         commit_amount: u256
     ) -> bool;
@@ -243,6 +252,14 @@ pub trait IMetabridge<TContractState> {
     fn get_total_no_of_orders(
         self: @TContractState
     ) -> u256;
-    
 
+    // fn view_order_by_address(
+    //     self: @TContractState,
+    //     entrepreneur_address: ContractAddress
+    // ) -> Array<Order>;
+
+    // pub get_address(
+    //     self: @TContractState,
+    //     user_id: u256
+    // ) -> ContractAddress;
 }
