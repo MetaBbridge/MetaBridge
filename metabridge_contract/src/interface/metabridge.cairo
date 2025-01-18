@@ -174,7 +174,6 @@ pub trait IMetabridge<TContractState> {
         phone_no: felt252,
         location_addr: felt252,
         links: Links,
-        milestones: Milestone,
         team_details: Team,
         document_upload: Document,
         tokenized_equity_offer: Equity,
