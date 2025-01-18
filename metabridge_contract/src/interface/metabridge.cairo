@@ -138,6 +138,7 @@ pub trait IMetabridge<TContractState> {
     // Setter functions
     fn select_role(
         ref self: TContractState,
+        user_address: ContractAddress,
         roleTitle: felt252
     );
 
@@ -218,11 +219,12 @@ pub trait IMetabridge<TContractState> {
     ) -> bool;
 
     fn check_user_role(
-        self: @TContractState
+        self: @TContractState,
+        user_address: ContractAddress
     ) -> felt252;
 
     fn view_order(
-        self: @ContractState, 
+        self: @TContractState, 
         listed_order: u256
     ) -> Order;
 
@@ -234,6 +236,13 @@ pub trait IMetabridge<TContractState> {
         self: @TContractState
     ) -> Array<Entrepreneur>;
 
+    fn get_total_no_of_entrepreneur(
+        self: @TContractState
+    ) -> u256;
+
+    fn get_total_no_of_orders(
+        self: @TContractState
+    ) -> u256;
     
 
 }

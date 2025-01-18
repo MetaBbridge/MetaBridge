@@ -56,16 +56,13 @@ pub mod MetabridgeContract {
             }
         }
 
-        fn select_role(ref self: ContractState, roleTitle: felt252) {
-            let caller_addr = get_caller_address();
-
-            let role = roleTitle;
-            self.user_roles.write(caller_addr, role);
+        fn select_role(ref self: ContractState, user_address: ContractAddress, roleTitle: felt252) {
+            // let caller_addr = get_caller_address();            
+            self.user_roles.write(user_address, roleTitle);
         }
 
-        fn check_user_role(self: @ContractState) -> felt252 {
-            let user_addr = get_caller_address();
-            let role_status = self.user_roles.entry(user_addr).read();
+        fn check_user_role(self: @ContractState, user_address: ContractAddress) -> felt252 {
+            let role_status = self.user_roles.read(user_address);
 
             role_status
         }
@@ -80,7 +77,7 @@ pub mod MetabridgeContract {
         ) -> Entrepreneur {
             let caller_entity = get_caller_address();
 
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(caller_entity);
 
             assert(role_status == 1, 'Only Entrepreneur Can Register');
 
@@ -118,7 +115,7 @@ pub mod MetabridgeContract {
         ) -> u256 {
             let caller_entity = get_caller_address();
 
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(caller_entity);
 
             assert(role_status == 1, 'Only Entrepreneur Can Create');
             self.orders_count.write(self.orders_count.read() + 1);
@@ -154,7 +151,7 @@ pub mod MetabridgeContract {
         ) -> u256 {
             
             let caller_addr = get_caller_address();
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(caller_addr);
             assert(role_status == 1, 'Entrepreneurs Only');
         
             let retrieved_id = self.orders_id_created.entry(caller_addr).read();
@@ -181,7 +178,7 @@ pub mod MetabridgeContract {
         
         fn list_order(ref self: ContractState, order_id: u256, funding_amount: u256) -> Order {
             let caller_entity = get_caller_address();
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(caller_entity);
             assert(role_status == 1, 'Only Entrepreneur Allowed');
 
             let user_order_id = self.orders_id_created.entry(caller_entity).read();
@@ -223,7 +220,7 @@ pub mod MetabridgeContract {
         ) -> Investor {
             let user_addr = get_caller_address();
 
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(user_addr);
 
             assert(role_status == 2, 'Only Investor Role Allowed');
 
@@ -263,7 +260,7 @@ pub mod MetabridgeContract {
             investment_amount: u256
         ) -> u256 {
             let caller_addr = get_caller_address();
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(caller_addr);
 
             assert(role_status == 2, 'Only Investor Allowed');
 
@@ -297,7 +294,7 @@ pub mod MetabridgeContract {
         ) -> bool {
             let caller_addr = get_caller_address();
         
-            let role_status = self.check_user_role();
+            let role_status = self.check_user_role(caller_addr);
             assert(role_status == 2, 'Only Investor Role Allowed');
         
             assert(commit_amount > 0, 'Invalid Commit amount');
