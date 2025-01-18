@@ -60,7 +60,7 @@ pub mod MetabridgeContract {
             let caller_addr = get_caller_address();
 
             let role = roleTitle;
-            self.user_roles.entry(caller_addr).write(role);
+            self.user_roles.write(caller_addr, role);
         }
 
         fn check_user_role(self: @ContractState) -> felt252 {
@@ -69,7 +69,6 @@ pub mod MetabridgeContract {
 
             role_status
         }
-
 
         fn register_entrepreneur(
             ref self: ContractState,
@@ -91,7 +90,7 @@ pub mod MetabridgeContract {
                 country_of_origin,
                 state,
                 home_address,
-                hasRegistered: true,
+                has_registered: true,
                 milestone_count: 0
             };
 
@@ -180,32 +179,36 @@ pub mod MetabridgeContract {
            
         }
         
-        // fn list_order(ref self: ContractState, order_id: u256, funding_amount: u256) -> Order {
-        //     let caller_entity = get_caller_address();
-        //     let role_status = self.check_user_role();
-        //     assert(role_status == 1, 'Only Entrepreneur Allowed');
+        fn list_order(ref self: ContractState, order_id: u256, funding_amount: u256) -> Order {
+            let caller_entity = get_caller_address();
+            let role_status = self.check_user_role();
+            assert(role_status == 1, 'Only Entrepreneur Allowed');
 
-        //     let user_order_id = self.orders_id_created.entry(caller_entity).read();
-        //     assert(user_order_id == order_id, 'User ID does not exist');
+            let user_order_id = self.orders_id_created.entry(caller_entity).read();
+            assert(user_order_id == order_id, 'User ID does not exist');
 
-        //     let mut orrder = self.orders.entry(order_id).read();
-        //     orrder.funding_amount_requested = funding_amount;
-        //     self.orders.entry(order_id).write(orrder);
+            let mut orrder = self.orders.entry(order_id).read();
+            let is_order_verified = orrder.verified_by_admin;
 
-        //     self.listed_order_count.write(self.listed_order_count.read() + 1);
-        //     let listed_orrder_id = self.listed_order_count.read();
+            assert(is_order_verified == true, 'Order Not Verified');
 
-        //     self.listed_order_id.entry(caller_entity).write(listed_orrder_id);
+            orrder.funding_amount_requested = funding_amount;
+            self.orders.entry(order_id).write(orrder);
 
-        //     self.listed_orders.entry(order_id).write(listed_orrder_id);
-        //     self.listed_order_count.write(self.listed_order_count.read() + 1);
-        //     let listed_orrder_id = self.listed_order_count.read();
+            self.listed_order_count.write(self.listed_order_count.read() + 1);
+            let listed_orrder_id = self.listed_order_count.read();
 
-        //     self.listed_order_id.entry(caller_entity).write(listed_orrder_id);
-        //     self.listed_order_to_order.entry(listed_orrder_id).write(orrder);
+            self.listed_order_id.entry(caller_entity).write(listed_orrder_id);
 
-        //     return orrder;
-        // }
+            self.listed_orders.entry(order_id).write(listed_orrder_id);
+            self.listed_order_count.write(self.listed_order_count.read() + 1);
+            let listed_orrder_id = self.listed_order_count.read();
+
+            self.listed_order_id.entry(caller_entity).write(listed_orrder_id);
+            self.listed_order_to_order.entry(listed_orrder_id).write(orrder);
+
+            return orrder;
+        }
 
         fn register_investor(
             ref self: ContractState,
@@ -243,7 +246,10 @@ pub mod MetabridgeContract {
             return inv;
         }
 
-        fn view_order(self: @ContractState, listed_order: u256) -> Order {
+        fn view_order(
+            self: @ContractState, 
+            listed_order: u256
+        ) -> Order {
             let listed_order_id = self.listed_orders.entry(listed_order).read();
             assert(listed_order_id != 0, 'Order is not listed');
 
@@ -318,6 +324,74 @@ pub mod MetabridgeContract {
             }
         
             true 
+        }
+
+        fn verify_order(
+            ref self: ContractState,
+            order_id: u256
+        ) -> bool {
+            let mut existing_orders = self.orders.entry(order_id).read();
+
+            existing_orders.verified_by_admin = true;
+
+            true
+        }
+
+        fn get_total_entrepreneurs(
+            self: @ContractState
+        ) -> Array<Entrepreneur> {
+            let mut entrepreneurs_array = ArrayTrait::new();
+            let entrepreneur_total = self.entrepreneur_count.read();
+
+            for count in 1..entrepreneur_total {
+                let entrepreneur = self.entrepreneurs.entry(count).read();
+                entrepreneurs_array.append(entrepreneur);
+            };
+
+            entrepreneurs_array
+
+        }
+
+        fn view_orders(
+            self: @ContractState
+        ) -> Array<Order> {
+            let mut all_orders = ArrayTrait::new();
+            let orders_count = self.orders_count.read();
+
+            for count in 1..orders_count {
+                let orrd = self.orders.entry(count).read();
+                all_orders.append(orrd);
+            };
+
+            all_orders 
+
+        }
+
+        fn remove_entrepreneur(
+            ref self: ContractState,
+            entrepreneur_id: u256
+        ) -> Entrepreneur {
+            let mut entre = self.entrepreneurs.entry(entrepreneur_id).read();
+
+            entre.has_registered = false;
+
+            entre
+        }
+
+        fn get_total_no_of_entrepreneur(
+            self: @ContractState
+        ) -> u256 {
+            let no_of_entrepreneur = self.entrepreneur_count.read();
+
+            no_of_entrepreneur
+        }
+
+        fn get_total_no_of_orders(
+            self: @ContractState
+        ) -> u256 {
+            let no_of_orders = self.orders_count.read();
+
+            no_of_orders
         }
 
     }

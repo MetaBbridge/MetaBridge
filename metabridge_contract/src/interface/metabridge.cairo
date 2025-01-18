@@ -9,7 +9,7 @@ pub struct Entrepreneur {
     pub country_of_origin: felt252,
     pub state: felt252,
     pub home_address: felt252,
-    pub hasRegistered: bool,
+    pub has_registered: bool,
     pub milestone_count: u256
     // pub teamCount: u8,
     // pub whoRegisterForCompany: felt252,
@@ -179,14 +179,14 @@ pub trait IMetabridge<TContractState> {
     fn list_order(
         ref self: TContractState,
         order_id: u256,
-        funding_amount: felt252
+        funding_amount: u256
     ) -> Order;
    
     fn add_milestone(
         ref self: TContractState,
         order_id: u256,
         milestone: Milestone
-    ) -> Array<Milestone>;
+    ) -> u256;
 
     fn invest(
         ref self: TContractState,
@@ -202,9 +202,15 @@ pub trait IMetabridge<TContractState> {
         commit_amount: u256
     ) -> bool;
 
-    // fn verify_order(){
-        
-    // }
+    fn verify_order(
+        ref self: TContractState,
+        order_id: u256
+    ) -> bool;
+
+    fn remove_entrepreneur(
+        ref self: TContractState,
+        entrepreneur_id: u256
+    ) -> Entrepreneur;
 
     // Getter functions
     fn user_has_role(
@@ -216,8 +222,18 @@ pub trait IMetabridge<TContractState> {
     ) -> felt252;
 
     fn view_order(
-        self: @TContractState,
+        self: @ContractState, 
         listed_order: u256
     ) -> Order;
+
+    fn view_orders(
+        self: @TContractState,
+    ) -> Array<Order>;
+
+    fn get_total_entrepreneurs(
+        self: @TContractState
+    ) -> Array<Entrepreneur>;
+
+    
 
 }
