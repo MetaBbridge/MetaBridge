@@ -181,6 +181,7 @@ pub mod MetabridgeContract {
             entrepreneur_id: u256,
             milestone: Milestone
         ) -> u256 {
+
             // let caller_addr = get_caller_address();
 
             let new_entrepreneur = self.entrepreneurs.read(entrepreneur_id);
@@ -189,6 +190,7 @@ pub mod MetabridgeContract {
             // assert(user_address != ' ', 'Invalid Address');
 
             let role_status = self.check_user_role(user_address);
+
             assert(role_status == 1, 'Entrepreneurs Only');
         
             let retrieved_id = self.orders_id_created.entry(user_address).read();
@@ -228,6 +230,7 @@ pub mod MetabridgeContract {
             // assert(user_address != ' ', 'Invalid Address');
 
             let role_status = self.check_user_role(user_address);
+            
             assert(role_status == 1, 'Only Entrepreneur Allowed');
 
             let user_order_id = self.orders_id_created.entry(user_address).read();
@@ -359,6 +362,7 @@ pub mod MetabridgeContract {
             // assert(user_address != ' ', 'Invalid Address');
         
             let role_status = self.check_user_role(user_address);
+
             assert(role_status == 2, 'Only Investor Role Allowed');
         
             assert(commit_amount > 0, 'Invalid Commit amount');
