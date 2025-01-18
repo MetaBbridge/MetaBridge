@@ -65,7 +65,7 @@ pub mod MetabridgeContract {
 
         fn check_user_role(self: @ContractState) -> felt252 {
             let user_addr = get_caller_address();
-            let role_status = self.user_roles.entry(user_addr).read();
+            let role_status = self.user_roles.read(user_addr);
 
             role_status
         }

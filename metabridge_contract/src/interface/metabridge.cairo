@@ -222,7 +222,7 @@ pub trait IMetabridge<TContractState> {
     ) -> felt252;
 
     fn view_order(
-        self: @ContractState, 
+        self: @TContractState, 
         listed_order: u256
     ) -> Order;
 
@@ -233,6 +233,14 @@ pub trait IMetabridge<TContractState> {
     fn get_total_entrepreneurs(
         self: @TContractState
     ) -> Array<Entrepreneur>;
+
+    fn get_total_no_of_entrepreneur(
+        self: @TContractState
+    ) -> u256;
+
+    fn get_total_no_of_orders(
+        self: @TContractState
+    ) -> u256;
 
     
 
