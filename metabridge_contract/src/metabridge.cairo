@@ -132,7 +132,6 @@ pub mod MetabridgeContract {
             phone_no: felt252,
             location_addr: felt252,
             links: Links,
-            milestones: Milestone,
             team_details: Team,
             document_upload: Document,
             tokenized_equity_offer: Equity,
@@ -181,7 +180,6 @@ pub mod MetabridgeContract {
             entrepreneur_id: u256,
             milestone: Milestone
         ) -> u256 {
-
             // let caller_addr = get_caller_address();
 
             let new_entrepreneur = self.entrepreneurs.read(entrepreneur_id);
@@ -190,7 +188,6 @@ pub mod MetabridgeContract {
             // assert(user_address != ' ', 'Invalid Address');
 
             let role_status = self.check_user_role(user_address);
-
             assert(role_status == 1, 'Entrepreneurs Only');
         
             let retrieved_id = self.orders_id_created.entry(user_address).read();
@@ -230,7 +227,6 @@ pub mod MetabridgeContract {
             // assert(user_address != ' ', 'Invalid Address');
 
             let role_status = self.check_user_role(user_address);
-            
             assert(role_status == 1, 'Only Entrepreneur Allowed');
 
             let user_order_id = self.orders_id_created.entry(user_address).read();
@@ -362,7 +358,6 @@ pub mod MetabridgeContract {
             // assert(user_address != ' ', 'Invalid Address');
         
             let role_status = self.check_user_role(user_address);
-
             assert(role_status == 2, 'Only Investor Role Allowed');
         
             assert(commit_amount > 0, 'Invalid Commit amount');
@@ -459,12 +454,12 @@ pub mod MetabridgeContract {
             no_of_orders
         }
 
-        fn view_order_by_address(
-            self: @ContractState,
-            entrepreneur_address: ContractAddress
-        ) -> Array<Order> {
+        // fn view_order_by_address(
+        //     self: @ContractState,
+        //     entrepreneur_address: ContractAddress
+        // ) -> Array<Order> {
 
-        }
+        // }
 
 
     }
