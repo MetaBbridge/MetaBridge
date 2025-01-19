@@ -11,7 +11,9 @@ pub struct Entrepreneur {
     pub home_address: felt252,
     pub has_registered: bool,
     pub milestone_count: u256,
-    pub user_address: ContractAddress
+    pub user_address: ContractAddress,
+    pub team_count: u256,
+    pub equity_count: u256
     // pub teamCount: u8,
     // pub whoRegisterForCompany: felt252,
     // pub positionOfWhoRegister: felt252,
@@ -66,8 +68,8 @@ pub struct Timeframe {
 pub struct Milestone {
     pub title: felt252,
     pub description: felt252,
-    pub timeframe: Timeframe,
     pub req_fund_for_milestone: felt252,
+    pub timeframe: Timeframe,
     pub kpi: felt252,
     pub roi: felt252
 }
@@ -195,6 +197,20 @@ pub trait IMetabridge<TContractState> {
         milestone: Milestone
     ) -> u256;
 
+    fn add_team(
+        ref self: TContractState,
+        order_id: u256,
+        entrepreneur_id: u256,
+        team: Team
+    ) -> u256;
+
+    fn add_equity(
+        ref self: TContractState,
+        order_id: u256,
+        entrepreneur_id: u256,
+        equity: Equity
+    ) -> u256;
+
     fn invest(
         ref self: TContractState,
         order_id: u256,
@@ -252,10 +268,35 @@ pub trait IMetabridge<TContractState> {
         self: @TContractState
     ) -> u256;
 
-    // fn view_order_by_address(
+    fn view_order_by_address(
+        self: @TContractState,
+        entrepreneur_address: ContractAddress
+    ) -> Order;
+
+    fn get_milestones(
+        self: @TContractState,
+        order_id: u256,
+        entrepreneur_id: u256
+    ) -> Array<Milestone>;
+
+    fn get_equities(
+        self: @TContractState,
+        order_id: u256,
+        entrepreneur_id: u256
+    ) -> Array<Equity>;
+
+    fn get_teams(
+        self: @TContractState,
+        order_id: u256,
+        entrepreneur_id: u256
+    ) -> Array<Team>;
+
+    
+
+    // fn get_total_entrepreneur_orders(
     //     self: @TContractState,
     //     entrepreneur_address: ContractAddress
-    // ) -> Array<Order>;
+    // ) -> u256;
 
     // pub get_address(
     //     self: @TContractState,
