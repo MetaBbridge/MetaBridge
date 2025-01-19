@@ -461,6 +461,40 @@ pub mod MetabridgeContract {
 
         // }
 
+        fn view_order_by_address(
+            self: @ContractState,
+            entrepreneur_address: ContractAddress
+        ) -> Order {
+            let order_id = self.orders_id_created.entry(entrepreneur_address).read();
+        
+            assert(order_id != 0.into(), 'Order Dont Exist');
+        
+            let order = self.orders.entry(order_id).read();
+        
+            order
+        }
+
+        // fn get_total_entrepreneur_orders(
+        //     self: @ContractState,
+        //     entrepreneur_address: ContractAddress
+        // ) -> u256 {
+        //     let order_id = self.orders_id_created.entry(entrepreneur_address).read();
+
+        //     assert(order_id != 0.into(), 'Address does Not Exist');
+
+        //     let mut count: u256 = 0;
+
+        //     let total_orders_count = self.orders_count.read();
+
+        //     for counter in 1..total_orders_count {
+                
+        //     }
+
+           
+
+        // }
+        
+
 
     }
 }
