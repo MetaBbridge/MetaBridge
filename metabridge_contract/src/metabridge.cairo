@@ -9,7 +9,7 @@ pub mod MetabridgeContract {
     };
     use crate::interface::metabridge::{
         IMetabridge, Entrepreneur, Investor, Order, Project, Links, Milestone, Document, Team,
-        Equity
+        Equity, Timeframe
     };
     // use core::poseidon::PoseidonTrait;
     // use core::hash::{HashStateTrait, HashStateExTrait};
@@ -39,7 +39,9 @@ pub mod MetabridgeContract {
         waiting_pool_id: u256,
         waiting_pool_by_user_to_id: Map::<ContractAddress, u256>,
         //milestone_collection: Map::<u256, Array<Milestone>>
-        milestones_created: Map::<(u256, u256), Milestone> // orderid to counter to Milestone
+        milestones_created: Map::<(u256, u256), Milestone>, // orderid to counter to Milestone
+        team_created: Map::<(u256, u256), Team>,
+        equity_created: Map::<(u256, u256), Equity>
 
     }
 
@@ -100,7 +102,8 @@ pub mod MetabridgeContract {
                 home_address,
                 has_registered: true,
                 milestone_count: 0,
-                user_address
+                user_address,
+                team_count: 0
             };
 
             self.entrepreneur_count.write(self.entrepreneur_count.read() + 1);
@@ -145,20 +148,33 @@ pub mod MetabridgeContract {
 
             // assert(user_address != '0000', 'Invalid Address');
 
+            let timeframe = Timeframe {
+                start_date: '',
+                end_date: ''
+            };
+
             let role_status = self.check_user_role(user_address);
+            let milestone = Milestone {
+                title: '',
+                description: '',
+                timeframe,
+                req_fund_for_milestone: '',
+                kpi: '',
+                roi: ''
+            };
 
             assert(role_status == 1, 'Only Entrepreneur Can Create');
             self.orders_count.write(self.orders_count.read() + 1);
 
             let order_id = self.orders_count.read();
             
-            let new_order = Order {
+            let new_order = Order{
                 project,
                 email,
                 phone_no,
                 location_addr,
                 links,
-                milestones,
+                milestones: milestone,
                 team_details,
                 document_upload,
                 tokenized_equity_offer,
@@ -199,6 +215,8 @@ pub mod MetabridgeContract {
 
             let milestone_counter = entre.milestone_count;
             self.milestones_created.entry((order_id, milestone_counter)).write(milestone);
+            let mut new_order = self.orders.entry(order_id).read();
+            new_order.milestones = milestone;
 
 
             milestone_counter
@@ -208,8 +226,64 @@ pub mod MetabridgeContract {
             //     let milestone = self.milestones_created.entry((order_id, count)).read();
             //     milestones_array.append(milestone);
             // }
-
            
+        }
+
+        fn add_team(
+            ref self: ContractState,
+            order_id: u256,
+            entrepreneur_id: u256,
+            team: Team
+        ) -> u256 {
+
+            let new_entrepreneur = self.entrepreneurs.read(entrepreneur_id);
+            let user_address = new_entrepreneur.user_address;
+
+            let role_status = self.check_user_role(user_address);
+            assert(role_status == 1, 'Entrepreneurs Only');
+        
+            let retrieved_id = self.orders_id_created.entry(user_address).read();
+            assert(retrieved_id == order_id, 'You Cant do this!');
+
+            let entre_id = self.entrepreneurs_id.entry(user_address).read();
+            let mut entre = self.entrepreneurs.entry(entre_id).read();
+            entre.team_count += 1;
+
+            let team_counter = entre.team_count;
+            self.team_created.entry((order_id, team_counter)).write(team);
+
+            let mut new_order = self.orders.entry(order_id).read();
+            new_order.team_details = team;
+
+            team_counter
+        }
+
+        fn add_equity(
+            ref self: ContractState,
+            order_id: u256,
+            entrepreneur_id: u256,
+            equity: Equity
+        ) -> u256 {
+            let new_entrepreneur = self.entrepreneurs.read(entrepreneur_id);
+            let user_address = new_entrepreneur.user_address;
+
+            let role_status = self.check_user_role(user_address);
+            assert(role_status == 1, 'Entrepreneurs Only');
+        
+            let retrieved_id = self.orders_id_created.entry(user_address).read();
+            assert(retrieved_id == order_id, 'You Cant do this!');
+
+            let entre_id = self.entrepreneurs_id.entry(user_address).read();
+            let mut entre = self.entrepreneurs.entry(entre_id).read();
+            entre.equity_count += 1;
+
+            let team_counter = entre.team_count;
+            self.equity_created.entry((order_id, team_counter)).write(equity);
+
+            let mut new_order = self.orders.entry(order_id).read();
+            new_order.tokenized_equity_offer = equity;
+
+            team_counter
         }
         
         fn list_order(
@@ -472,6 +546,84 @@ pub mod MetabridgeContract {
             let order = self.orders.entry(order_id).read();
         
             order
+        }
+
+        fn get_milestones(
+            self: @ContractState,
+            order_id: u256,
+            entrepreneur_id: u256
+        ) -> Array<Milestone> {
+            let mut milestones_array = ArrayTrait::new();
+
+            let new_entre = self.entrepreneurs.read(entrepreneur_id);
+            let user_address = new_entre.user_address;
+
+            let entre_id = self.entrepreneurs_id.entry(user_address).read();
+            let entre = self.entrepreneurs.entry(entre_id).read();
+            let m_counter = entre.milestone_count;
+
+            for count in 1..m_counter {
+                let milestone = self.milestones_created.entry((order_id, count)).read();
+                milestones_array.append(milestone);
+            };
+    
+            // while self.milestones_created.contains((order_id, counter)) {
+            //     let milestone = self.milestones_created.entry((order_id, counter)).read();
+            //     milestones_array.append(milestone);
+            //     counter += 1;
+            // }
+    
+            milestones_array
+        }
+
+        fn get_equities(
+            self: @ContractState,
+            order_id: u256,
+            entrepreneur_id: u256
+        ) -> Array<Equity> {
+            let mut equities_array = ArrayTrait::new();
+
+            let new_entre = self.entrepreneurs.read(entrepreneur_id);
+            let user_address = new_entre.user_address;
+
+            let entre_id = self.entrepreneurs_id.entry(user_address).read();
+            let entre = self.entrepreneurs.entry(entre_id).read();
+            let e_counter = entre.equity_count;
+
+            for count in 1..e_counter {
+                let equity = self.equity_created.entry((order_id, count)).read();
+                equities_array.append(equity);
+            };
+    
+            // while self.equity_created.contains((order_id, counter)) {
+            //     let equity = self.equity_created.entry((order_id, counter)).read();
+            //     equities_array.append(equity);
+            //     counter += 1;
+            // }
+    
+            equities_array
+        }
+    
+        fn get_teams(
+            self: @ContractState,
+            order_id: u256,
+            entrepreneur_id: u256
+        ) -> Array<Team> {
+            let mut teams_array = ArrayTrait::new();
+
+            let new_entre = self.entrepreneurs.read(entrepreneur_id);
+            let user_address = new_entre.user_address;
+
+            let entre_id = self.entrepreneurs_id.entry(user_address).read();
+            let entre = self.entrepreneurs.entry(entre_id).read();
+            let t_counter = entre.team_count;
+
+            for count in 1..t_counter {
+                let team = self.equity_created.entry((order_id, count)).read();
+                teams_array.append(team);
+            };
+    
+            teams_array
         }
 
         // fn get_total_entrepreneur_orders(
