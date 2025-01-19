@@ -291,8 +291,6 @@ pub trait IMetabridge<TContractState> {
         entrepreneur_id: u256
     ) -> Array<Team>;
 
-    
-
     // fn get_total_entrepreneur_orders(
     //     self: @TContractState,
     //     entrepreneur_address: ContractAddress
