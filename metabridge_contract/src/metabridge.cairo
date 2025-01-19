@@ -608,7 +608,7 @@ pub mod MetabridgeContract {
             let t_counter = entre.team_count;
 
             for count in 1..t_counter {
-                let team = self.equity_created.entry((order_id, count)).read();
+                let team = self.team_created.entry((order_id, count)).read();
                 teams_array.append(team);
             };
     
