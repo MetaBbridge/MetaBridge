@@ -103,7 +103,8 @@ pub mod MetabridgeContract {
                 has_registered: true,
                 milestone_count: 0,
                 user_address,
-                team_count: 0
+                team_count: 0,
+                equity_count: 0
             };
 
             self.entrepreneur_count.write(self.entrepreneur_count.read() + 1);
@@ -567,12 +568,6 @@ pub mod MetabridgeContract {
                 milestones_array.append(milestone);
             };
     
-            // while self.milestones_created.contains((order_id, counter)) {
-            //     let milestone = self.milestones_created.entry((order_id, counter)).read();
-            //     milestones_array.append(milestone);
-            //     counter += 1;
-            // }
-    
             milestones_array
         }
 
@@ -594,13 +589,7 @@ pub mod MetabridgeContract {
                 let equity = self.equity_created.entry((order_id, count)).read();
                 equities_array.append(equity);
             };
-    
-            // while self.equity_created.contains((order_id, counter)) {
-            //     let equity = self.equity_created.entry((order_id, counter)).read();
-            //     equities_array.append(equity);
-            //     counter += 1;
-            // }
-    
+
             equities_array
         }
     
