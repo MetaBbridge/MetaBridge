@@ -2,10 +2,11 @@
 
 ![Metabridge Logo](./metabridge.jpg)
 
-### Overview
+### Decentralizing Access to Investment/Funding 
 MetaBridge is a decentralized platform designed to reform the way entrepreneurs and investors collaborate. By leveraging the power of the Starknet blockchain, MetaBridge creates a secure, transparent, and milestone-driven funding ecosystem. Entrepreneurs can create funding orders for their projects while investors gain access to vetted, tokenized investment opportunities. The platform fosters accountability and trust through blockchain-enabled governance and AI-powered support, ensuring measurable outcomes and successful collaborations.
 
 ### Key Features
+---
 **1. Milestone-Based Funding**
 MetaBridge ensures funds are released incrementally based on pre-defined milestones. This milestone-based funding mechanism fosters accountability, allowing investors to vote on and approve each stage before releasing the next tranche of funds.
 
@@ -27,6 +28,7 @@ MetaBridge provides intuitive interfaces tailored to its users:
 - Investors: Tools to browse verified projects, track portfolios, vote on milestones, and manage tokenized equity holdings.
 
 ### How It Works
+---
 **Registration & Verification:**
 Entrepreneurs and investors sign up via Starknet Wallet Connect, using Argent or Braavos wallets. KYC verification ensures all users meet compliance standards.
 
@@ -43,7 +45,7 @@ Investors contribute funds, which are locked in smart contracts. Funds are disbu
 Investors receive tokenized shares representing their stake in the project, enabling easy tracking of ownership and access to secondary market trading.
 
 ### Technical Architecture of MetaBridge
-
+---
 **Blockchain Integration:**
 MetaBridge uses Starknet's zero-knowledge proof (zk-proof) technology to ensure secure, scalable, and decentralized operations.
 
@@ -57,14 +59,16 @@ Compliance with KYC/AML regulations ensures a trustworthy ecosystem.
 A responsive web application for both entrepreneurs and investors, featuring secure APIs for seamless interaction between blockchain and database layers.
 
 ### Impact and Vision
+---
 MetaBridge aims to democratize funding by removing traditional barriers and creating a transparent, secure platform where businesses and investors can thrive. By focusing on milestone-based funding and tokenized equity, the platform ensures accountability, fosters trust, and provides measurable returns for all stakeholders.
 This MVP lays the foundation for future innovations, including the introduction of collaborative forums, AI-enhanced analytics, and an expanded ecosystem of decentralized financial tools. MetaBridge is not just a funding platform—it’s a new way of fostering collaboration and growth in the decentralized economy.
 
 ### Why Starknet?
+---
 Starknet's zk-proof technology offers unparalleled scalability, security, and decentralization, making it the ideal blockchain for MetaBridge’s vision. Its efficient handling of complex computations ensures the seamless implementation of milestone-based funding and tokenized equity. Furthermore, Starknet’s robust developer ecosystem provides the tools necessary for rapid iteration and future expansion.
 
 ## Getting Started
-
+---
 Follow these steps to start using **Metabridge**:
 1. Connect your wallet (Argent, Braavos, etc.) to the Metabridge platform.
 2. Select what you're coming into the platform to do (Investor or as an Entrepreneur).
@@ -75,6 +79,12 @@ Follow these steps to start using **Metabridge**:
 6. If, you're an Investor, you can see a list of orders created and you can click to vie details about the project.
 6. if interested in it and ready to forge ahead, you show an interest, you input the amount you're willig to invest and click on the button to get into a waiting room, where you can verify doubts by having conversation with the project team.
 7. If satisfied, you commit the funds, if otherwise you reject.
+
+### Smart Contract Address
+---
+0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df
+
+Go to: https://sepolia.starkscan.co/contract/0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df#read-write-contract
 
 ### Success Metrics
 MetaBridge will measure its success based on:
