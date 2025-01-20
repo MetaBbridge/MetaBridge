@@ -1,5 +1,7 @@
 ## MetaBridge: A Blockchain and AI Powered Investment Platform
 
+![Metabridge Logo](./metabridge.jpg)
+
 ### Overview
 MetaBridge is a decentralized platform designed to reform the way entrepreneurs and investors collaborate. By leveraging the power of the Starknet blockchain, MetaBridge creates a secure, transparent, and milestone-driven funding ecosystem. Entrepreneurs can create funding orders for their projects while investors gain access to vetted, tokenized investment opportunities. The platform fosters accountability and trust through blockchain-enabled governance and AI-powered support, ensuring measurable outcomes and successful collaborations.
 
@@ -60,6 +62,19 @@ This MVP lays the foundation for future innovations, including the introduction 
 
 ### Why Starknet?
 Starknet's zk-proof technology offers unparalleled scalability, security, and decentralization, making it the ideal blockchain for MetaBridge’s vision. Its efficient handling of complex computations ensures the seamless implementation of milestone-based funding and tokenized equity. Furthermore, Starknet’s robust developer ecosystem provides the tools necessary for rapid iteration and future expansion.
+
+## Getting Started
+
+Follow these steps to start using **Metabridge**:
+1. Connect your wallet (Argent, Braavos, etc.) to the Metabridge platform.
+2. Select what you're coming into the platform to do (Investor or as an Entrepreneur).
+2. Register either as an Entrepreneur or as an Investor.
+3. If you're an Entrepreneur, create order for funding while providing key requirements such as business documents, financial statements and legal documents.
+4. Once done and submitted, it will be under pending for Admin to verify.
+5. Once, Admin verifies order is listed and everyone can see it.
+6. If, you're an Investor, you can see a list of orders created and you can click to vie details about the project.
+6. if interested in it and ready to forge ahead, you show an interest, you input the amount you're willig to invest and click on the button to get into a waiting room, where you can verify doubts by having conversation with the project team.
+7. If satisfied, you commit the funds, if otherwise you reject.
 
 ### Success Metrics
 MetaBridge will measure its success based on:
