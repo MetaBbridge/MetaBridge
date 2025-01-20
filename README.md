@@ -6,17 +6,22 @@ MetaBridge is a decentralized platform designed to reform the way entrepreneurs 
 ### Key Features
 **1. Milestone-Based Funding**
 MetaBridge ensures funds are released incrementally based on pre-defined milestones. This milestone-based funding mechanism fosters accountability, allowing investors to vote on and approve each stage before releasing the next tranche of funds.
+
 **2. Tokenized Equity Representation**
 Investors’ contributions are represented as blockchain tokens, providing a seamless and transparent way to track ownership and enabling secondary market opportunities for tokenized equity shares.
+
 **3. AI-Driven Support**
-To simplify the onboarding and funding process, MetaBridge offers AI-powered tools for both entrepreneurs and investors:
-Entrepreneurs receive assistance in creating funding orders, understanding compliance guidelines, and structuring compelling business plans.
+To simplify the onboarding and funding process, MetaBridge offers AI-powered tools for both entrepreneurs and investors: Entrepreneurs receive assistance in creating funding orders, understanding compliance guidelines, and structuring compelling business plans.
 Investors benefit from project analysis, risk assessments, and tailored investment recommendations.
+
 **4. Transparent Governance**
 Using Starknet’s blockchain infrastructure, all transactions, votes, and funding decisions are immutably recorded. Decentralized governance ensures that both entrepreneurs and investors have a voice in the funding process through quorum-based decision-making.
+
 **5. User-Centric Design**
 MetaBridge provides intuitive interfaces tailored to its users:
+
 - Entrepreneurs: A streamlined dashboard for creating and managing funding orders, uploading verification documents, and tracking project progress.
+
 - Investors: Tools to browse verified projects, track portfolios, vote on milestones, and manage tokenized equity holdings.
 
 ### How It Works
