@@ -3,6 +3,7 @@
 ![Metabridge Logo](./metabridge.jpg)
 
 ### Decentralizing Access to Investment/Funding 
+---
 MetaBridge is a decentralized platform designed to reform the way entrepreneurs and investors collaborate. By leveraging the power of the Starknet blockchain, MetaBridge creates a secure, transparent, and milestone-driven funding ecosystem. Entrepreneurs can create funding orders for their projects while investors gain access to vetted, tokenized investment opportunities. The platform fosters accountability and trust through blockchain-enabled governance and AI-powered support, ensuring measurable outcomes and successful collaborations.
 
 ### Key Features
