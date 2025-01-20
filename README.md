@@ -73,7 +73,7 @@ Follow these steps to start using **Metabridge**:
 
 ### MetaBridge Smart Contract Address
 ---
-**Deployed Contract Address:** 0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df
+**Deployed Contract Address:** `0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df`
 
 **To View Contract on Starkscan, go to:** https://sepolia.starkscan.co/contract/0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df#read-write-contract
 
