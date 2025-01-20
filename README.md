@@ -30,33 +30,33 @@ MetaBridge provides intuitive interfaces tailored to its users:
 
 ### How It Works
 ---
-**Registration & Verification:**
+- **Registration & Verification:**
 Entrepreneurs and investors sign up via Starknet Wallet Connect, using Argent or Braavos wallets. KYC verification ensures all users meet compliance standards.
 
-**Order Creation:**
+- **Order Creation:**
 Entrepreneurs create funding orders by providing detailed information, including a company overview, funding requirements, utilization plans, milestones, and supporting documentation such as legal certifications and financial records.
 
-**Opportunity Discovery:**
+- **Opportunity Discovery:**
 Verified funding orders are listed publicly, enabling investors to browse, analyze, and select opportunities based on their preferences.
 
-**Investment & Milestone Voting:**
+- **Investment & Milestone Voting:**
 Investors contribute funds, which are locked in smart contracts. Funds are disbursed incrementally as milestones are achieved, with investors voting to approve progress before each disbursement.
 
-**Tokenized Equity:**
+- **Tokenized Equity:**
 Investors receive tokenized shares representing their stake in the project, enabling easy tracking of ownership and access to secondary market trading.
 
 ### Technical Architecture of MetaBridge
 ---
-**Blockchain Integration:**
+- **Blockchain Integration:**
 MetaBridge uses Starknet's zero-knowledge proof (zk-proof) technology to ensure secure, scalable, and decentralized operations.
 
 Smart contracts manage milestone-based fund disbursement, tokenization, and transaction recording.
 
-**Security:**
+- **Security:**
 Smart contract audits and end-to-end encryption protect all sensitive data and transactions.
 Compliance with KYC/AML regulations ensures a trustworthy ecosystem.
 
-**Platform Design:**
+- **Platform Design:**
 A responsive web application for both entrepreneurs and investors, featuring secure APIs for seamless interaction between blockchain and database layers.
 
 ### Impact and Vision
@@ -78,14 +78,14 @@ Follow these steps to start using **Metabridge**:
 4. Once done and submitted, it will be under pending for Admin to verify.
 5. Once, Admin verifies order is listed and everyone can see it.
 6. If, you're an Investor, you can see a list of orders created and you can click to vie details about the project.
-6. if interested in it and ready to forge ahead, you show an interest, you input the amount you're willig to invest and click on the button to get into a waiting room, where you can verify doubts by having conversation with the project team.
-7. If satisfied, you commit the funds, if otherwise you reject.
+7. if interested in it and ready to forge ahead, you show an interest, you input the amount you're willig to invest and click on the button to get into a waiting room, where you can verify doubts by having conversation with the project team.
+8. If satisfied, you commit the funds, if otherwise you reject.
 
-### Smart Contract Address
+### MetaBridge Smart Contract Address
 ---
-0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df
+**Deployed Contract Address:** 0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df
 
-Go to: https://sepolia.starkscan.co/contract/0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df#read-write-contract
+**To View Contract on Starkscan, go to:** https://sepolia.starkscan.co/contract/0x06849279dd4de3bc7ac3cbde6a47f1b41042597a60ff5817acc7d804cec5e1df#read-write-contract
 
 ### Success Metrics
 MetaBridge will measure its success based on:
